@@ -26,7 +26,7 @@ class MatrixLocationFineTuning:
         self.device = self._select_device()
         
         # Caricamento modello e tokenizer
-        print(f"🔄 Caricamento modello: {model_name}")
+        print(f" Caricamento modello: {model_name}")
         self.model = GPTNeoForCausalLM.from_pretrained(model_name)
         self.tokenizer = GPT2Tokenizer.from_pretrained(model_name)
         
@@ -47,13 +47,13 @@ class MatrixLocationFineTuning:
             torch.device: Device di computazione
         """
         if torch.backends.mps.is_available():
-            print("🍎 Utilizzo Metal Performance Shaders (MPS)")
+            print("� Utilizzo Metal Performance Shaders (MPS)")
             return torch.device("mps")
         elif torch.cuda.is_available():
-            print("🚀 Utilizzo CUDA GPU")
+            print(" Utilizzo CUDA GPU")
             return torch.device("cuda")
         else:
-            print("💻 Utilizzo CPU")
+            print(" Utilizzo CPU")
             return torch.device("cpu")
     
     def _prepare_dataset(self, dataset_path):
@@ -84,7 +84,7 @@ class MatrixLocationFineTuning:
             formatted_texts.append(text)
         
         # Tokenizzazione
-        print("🔤 Tokenizzazione del dataset")
+        print(" Tokenizzazione del dataset")
         encodings = self.tokenizer(
             formatted_texts, 
             padding=True, 
@@ -148,11 +148,11 @@ class MatrixLocationFineTuning:
         )
         
         # Fine-tuning
-        print("🏋️ Inizio fine-tuning...")
+        print(" Inizio fine-tuning...")
         trainer.train()
         
         # Salvataggio
-        print("💾 Salvataggio modello e tokenizer...")
+        print(" Salvataggio modello e tokenizer...")
         trainer.save_model(output_dir)
         self.tokenizer.save_pretrained(output_dir)
         
@@ -210,13 +210,13 @@ class MatrixLocationFineTuning:
 if __name__ == "__main__":
     # Verifica e notifica requisiti
     import transformers
-    print(f"🔍 Versione di Transformers: {transformers.__version__}")
+    print(f" Versione di Transformers: {transformers.__version__}")
     
     try:
         import accelerate
-        print(f"✅ Versione accelerate: {accelerate.__version__}")
+        print(f" Versione accelerate: {accelerate.__version__}")
     except ImportError:
-        print("❌ Libreria 'accelerate' non trovata. Installala con:")
+        print(" Libreria 'accelerate' non trovata. Installala con:")
         print("  pip install 'accelerate>=0.26.0'")
         exit(1)  # Esci se manca accelerate
     
@@ -228,13 +228,13 @@ if __name__ == "__main__":
     # Controlla se esiste già un modello addestrato
     model_path = './matrix_location_model'
     if os.path.exists(model_path) and os.path.isdir(model_path):
-        print("🔄 Caricamento modello già addestrato...")
+        print(" Caricamento modello già addestrato...")
         fine_tuner.model = GPTNeoForCausalLM.from_pretrained(model_path)
         fine_tuner.tokenizer = GPT2Tokenizer.from_pretrained(model_path)
         fine_tuner.model = fine_tuner.model.to(fine_tuner.device)
     else:
         # Esegui fine-tuning
-        print("🏋️ Addestramento nuovo modello...")
+        print(" Addestramento nuovo modello...")
         fine_tuned_model, fine_tuned_tokenizer = fine_tuner.fine_tune(
             output_dir=model_path,
             learning_rate=5e-5,
@@ -249,9 +249,9 @@ if __name__ == "__main__":
         "Localizza il libro"
     ]
     
-    print("\n📊 TEST GENERAZIONE:")
+    print("\n TEST GENERAZIONE:")
     print("====================")
     for test_input in test_inputs:
         result = fine_tuner.generate_location(test_input)
-        print(f"\n🔍 Input: {test_input}")
-        print(f"📍 Output: {result}")
+        print(f"\n Input: {test_input}")
+        print(f" Output: {result}")
