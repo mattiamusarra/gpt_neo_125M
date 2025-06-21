@@ -47,7 +47,7 @@ class MatrixLocationFineTuning:
             torch.device: Device di computazione
         """
         if torch.backends.mps.is_available():
-            print("� Utilizzo Metal Performance Shaders (MPS)")
+            print(" Utilizzo Metal Performance Shaders (MPS)")
             return torch.device("mps")
         elif torch.cuda.is_available():
             print(" Utilizzo CUDA GPU")
